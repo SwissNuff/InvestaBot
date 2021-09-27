@@ -15,13 +15,20 @@ async def on_ready():
 
 
 # ===== BOT COMMANDS  =====  #
-def add_stonks(stock):
+def add_stonks(stock, buy_price):
   if "symbols" in db.keys():
     symbols = db["symbols"]
     symbols.append(stock)
     db["symbols"] = symbols
   else:
     db["symbols"] = [stock]
+  if "buyPrice" in db.keys():
+    buyPrice = db["buyPrice"]
+    buyPrice.append(buy_price)
+    db["buyPrice"] = buyPrice
+  else:
+    db["buyPrice"] = [buy_price]
+
 
 def delete_stonks(index):
   symbols = db["symbols"]
@@ -59,18 +66,25 @@ async def on_message(message):
 
   if msg.startswith("$stonks"):
     symbols = db["symbols"]
-    for smbl in symbols:
-      output = get_stocks(smbl)
+    buyPrice = db["buyPrice"]
+    for i in range(len(symbols)):
+      output = get_stocks(symbols[i])
+      gains = (float(output[2]) - float(buyPrice[i])) / float(buyPrice[i])
       await message.channel.send(
-        f"""Stock: {output[0]} ({output[1]})
-        Current price: PHP {output[2]}
+        f"""
+        Stock: {output[0]} ({output[1]})
+```py
+Current price: PHP {output[2]}
+Buy price: PHP {buyPrice[i]}
+gains/loss: {round(gains, 2)}%
+```
         """
         )
   
   if msg.startswith("$add"):
     stock = msg.split("$add ",1)[1]
     smbl, buy_price = stock.split()
-    add_stonks(smbl)
+    add_stonks(smbl, buy_price)
     await message.channel.send(f"{smbl} has been added to lists with a buy price of {buy_price}.")
 
   if msg.startswith("$del"):
