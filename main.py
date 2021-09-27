@@ -3,6 +3,8 @@ import discord
 import requests
 import json
 from replit import db
+# from datetime import datetime
+
 
 client = discord.Client()
 
@@ -13,27 +15,19 @@ async def on_ready():
 
 
 # ===== BOT COMMANDS  =====  #
-def add_stonks(smbl, buy_price):
+def add_stonks(stock):
   if "symbols" in db.keys():
     symbols = db["symbols"]
-    symbols.append(smbl)
+    symbols.append(stock)
     db["symbols"] = symbols
-  if "price_list" in db.keys():
-    price_list = db["price_list"]
-    symbols.append(buy_price)
-    db["price_list"] = price_list
   else:
-    db["symbols"] = [smbl]
-    db["price_list"] = [price_list]
+    db["symbols"] = [stock]
 
 def delete_stonks(index):
   symbols = db["symbols"]
-  price_list = db["price_list"]
   if len(symbols) > index:
     del symbols[index]
-    del price_list[index]
   db["symbols"] = symbols
-  db["price_list"] = price_list
 
 
 def get_stocks(smbl):
@@ -44,6 +38,16 @@ def get_stocks(smbl):
   amount = json_data['stock'][0]['price']['amount']
   return name, symbol, amount
 
+# def time_module():
+#     print("time module in use")
+#     while True:
+#       current_time = datetime.now().strftime("%H:%M")
+#       print(current_time)
+#       if current_time == "04:30":
+#         print("time module ended")
+#         break
+
+# time_module()
 
 
 @client.event
@@ -55,25 +59,22 @@ async def on_message(message):
 
   if msg.startswith("$stonks"):
     symbols = db["symbols"]
-    price_list = db["price_list"]
-    for i in range(len(symbols)):
-      output = get_stocks(symbols[i])
+    for smbl in symbols:
+      output = get_stocks(smbl)
       await message.channel.send(
         f"""Stock: {output[0]} ({output[1]})
         Current price: PHP {output[2]}
-        Price bought: PHP {price_list[i]}
         """
         )
   
   if msg.startswith("$add"):
     stock = msg.split("$add ",1)[1]
     smbl, buy_price = stock.split()
-    add_stonks(smbl, buy_price)
+    add_stonks(smbl)
     await message.channel.send(f"{smbl} has been added to lists with a buy price of {buy_price}.")
 
   if msg.startswith("$del"):
     symbols = []
-    price_list = []
     if "symbols" in db.keys():
       index = int(msg.split("$del",1)[1])
       delete_stonks(index)
@@ -87,5 +88,8 @@ async def on_message(message):
       symbols = db["symbols"]
     await message.channel.send(symbols)
 
+  if msg.startswith("$help"):
+    await message.channel.send("`$help` : shows list of commands\n`$add <stock symbol> <buyprice>` : add stock symbol to the list\n `$del <list index>`: deletes stock symbol to the list\n`$show:`:Show all stocks bought")
+    
     
 client.run(os.environ['BOT'])
