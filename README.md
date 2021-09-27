@@ -1,5 +1,5 @@
 # InvestaBot
-Discord bot that reminds the client the status of their stocks
+Discord bot to manage personal stock updates
 
 ![Investabot](https://user-images.githubusercontent.com/39580184/134903511-66032a0e-271c-48f4-8d02-b30a53de2990.JPG)
 
