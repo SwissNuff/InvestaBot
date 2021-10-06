@@ -69,7 +69,7 @@ async def on_message(message):
     buyPrice = db["buyPrice"]
     for i in range(len(symbols)):
       output = get_stocks(symbols[i])
-      gains = (float(output[2]) - float(buyPrice[i])) / float(buyPrice[i])
+      gains = ((float(output[2]) - float(buyPrice[i])) / float(buyPrice[i]))*100
       await message.channel.send(
         f"""
         Stock: {output[0]} ({output[1]})
