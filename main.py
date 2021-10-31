@@ -3,7 +3,6 @@ import discord
 import requests
 import json
 from replit import db
-# from datetime import datetime
 
 
 client = discord.Client()
@@ -32,9 +31,12 @@ def add_stonks(stock, buy_price):
 
 def delete_stonks(index):
   symbols = db["symbols"]
+  buyPrice = db["buyPrice"]
   if len(symbols) > index:
     del symbols[index]
+    del buyPrice[index]
   db["symbols"] = symbols
+  buyPrice = db["buyPrice"]
 
 
 def get_stocks(smbl):
@@ -45,16 +47,6 @@ def get_stocks(smbl):
   amount = json_data['stock'][0]['price']['amount']
   return name, symbol, amount
 
-# def time_module():
-#     print("time module in use")
-#     while True:
-#       current_time = datetime.now().strftime("%H:%M")
-#       print(current_time)
-#       if current_time == "04:30":
-#         print("time module ended")
-#         break
-
-# time_module()
 
 
 @client.event
