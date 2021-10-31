@@ -6,5 +6,7 @@ Discord bot to manage personal stock updates
 - `$help` : shows list of commands
 - `$add <stock symbol> <buyprice>` : add stock symbol to the list
 - `$del <list index>`: deletes stock symbol to the list
+- `$cadd <stock symbol> <buyprice>` : add crypto to the list
+- `$cdel <list index>`: deletes crypto from the list
 - `$show`: shows all stocks bought
 

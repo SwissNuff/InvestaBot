@@ -140,17 +140,15 @@ gains/loss: {round(gains, 2)}%
     await message.channel.send(crypto_symbols)
 
   if msg.startswith("$show"):
-    await message.channel.send("Current stocks bought")
     symbols = []
     if "symbols" in db.keys():
       symbols = db["symbols"]
     if "crypto_symbols" in db.keys():
       crypto_symbols = db["crypto_symbols"]
-    await message.channel.send(symbols)
-    await message.channel.send(crypto_symbols)
+    await message.channel.send(f"Current stocks bought\n{symbols}\n{crypto_symbols}")
 
   if msg.startswith("$help"):
-    await message.channel.send("`$help` : shows list of commands\n`$add <stock symbol> <buyprice>` : add stock symbol to the list\n `$del <list index>`: deletes stock symbol to the list\n`$show:`:Show all stocks bought")
+    await message.channel.send("`$help` : shows list of commands\n`$add <stock symbol> <buyprice>` : add stock symbol to the list\n`$del <list index>`: deletes stock symbol from the list\n`$cadd <stock symbol> <buyprice>` : add crypto to the list\n`$cdel <list index>`: deletes crypto from the list\n`$show:`:Show all stocks bought")
     
     
 client.run(os.environ['BOT'])
