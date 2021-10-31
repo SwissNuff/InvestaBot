@@ -1,5 +1,6 @@
 # InvestaBot
 Discord bot to manage personal stock updates
+
 ![image](https://user-images.githubusercontent.com/39580184/139576507-688fc72e-4782-4fbd-90c3-80e098cab595.png)
 
 ## Commands
